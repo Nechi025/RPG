@@ -54,13 +54,12 @@ public class PlayerController : MonoBehaviour
     private void Interact()
     {
         var facingdir = new Vector3(animator.GetFloat("lastX"), animator.GetFloat("lastY"));
-        var interactPos = transform.position + new Vector3(0.1f, 0.1f, 0);
+        var interactPos = transform.position + facingdir * 0.1f;
 
-        RaycastHit2D hit = Physics2D.Raycast(interactPos, facingdir, 0.1f);
-
-        if (hit.transform.CompareTag("NPC"))
+        var collider = Physics2D.OverlapCircle(interactPos, 0.2f, interactableLayer);
+        if (collider != null)
         {
-            Debug.Log("Interactable object");
+            collider.GetComponent<Interactable>()?.Interact();
         }
     }
 
