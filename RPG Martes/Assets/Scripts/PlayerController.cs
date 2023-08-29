@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
 
     private Animator animator;
 
+    public bool isInteracting = false;
+
     [SerializeField] private LayerMask interactableLayer;
 
     private void Awake()
@@ -28,12 +30,14 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-
-
-        moveX = Input.GetAxisRaw("Horizontal");
-        moveY = Input.GetAxisRaw("Vertical");
-        animator.SetFloat("moveX", moveX);
-        animator.SetFloat("moveY", moveY);
+        if (!isInteracting)
+        {
+            moveX = Input.GetAxisRaw("Horizontal");
+            moveY = Input.GetAxisRaw("Vertical");
+            animator.SetFloat("moveX", moveX);
+            animator.SetFloat("moveY", moveY);
+        }
+        
 
         if (moveX != 0 || moveY != 0)
         {
@@ -47,7 +51,11 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            Interact();
+            if (isInteracting == true)
+            {
+                FindObjectOfType<DialogueController>()?.NextPhrase();
+            }
+            else Interact();
         }
     }
 
@@ -60,6 +68,7 @@ public class PlayerController : MonoBehaviour
         if (collider != null)
         {
             collider.GetComponent<Interactable>()?.Interact();
+            isInteracting = true;
         }
     }
 
