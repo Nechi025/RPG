@@ -37,6 +37,17 @@ public class DialogueController : MonoBehaviour
 
         string actualPhrase = dialogueQueue.Dequeue();
         textScreen.text = actualPhrase;
+        StartCoroutine(ShowCharacters(actualPhrase));
+    }
+
+    IEnumerator ShowCharacters (string texttoShow)
+    {
+        textScreen.text = "";
+        foreach (char character in texttoShow.ToCharArray())
+        {
+            textScreen.text += character;
+            yield return new WaitForSeconds(0.02f);
+        }
     }
 
     void CloseSing()
